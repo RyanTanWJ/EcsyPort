@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using EcsyPort;
 
@@ -27,6 +26,7 @@ namespace TestPort
 
         public override void init()
         {
+            priority = 2;
             // TODO: Create System Query
         }
     }
@@ -53,6 +53,7 @@ namespace TestPort
 
         public override void init()
         {
+            priority = 1;
             // TODO: Create System Query
         }
     }

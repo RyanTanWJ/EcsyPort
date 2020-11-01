@@ -49,7 +49,7 @@ namespace EcsyPort
             }
             Dictionary<Type, System> systems = systemManager.getSystems();
             Dictionary<Type, EntityPool> entities = entityManager.getEntities();
-            foreach (Type systemKey in systems.Keys)
+            foreach (Type systemKey in systemManager.OrderedSystemKeys)
             {
                 foreach (Type entityKey in entities.Keys)
                 {
