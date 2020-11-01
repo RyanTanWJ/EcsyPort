@@ -91,7 +91,11 @@ namespace EcsyPort
 
         public string stats()
         {
-            return "";
+            string systemString = "";
+            foreach (var key in OrderedSystemKeys){
+                systemString += "\n" + key;
+            }
+            return string.Format("SystemManager:\nNum System Types: {0}\nSystems:{1}", _systems.Keys.Count, systemString);
         }
 
         public List<Type> OrderedSystemKeys

@@ -13,11 +13,11 @@ public class InfoPanel : MonoBehaviour
     Text frameRateText;
 
     [SerializeField]
-    Text cubeEntitiesNumText;
+    Text statsText;
 
     void Update()
     {
         frameRateText.text = "Frame Rate: " + (1.0f/Time.deltaTime).ToString("F2");
-        cubeEntitiesNumText.text = test.world.stats();
+        statsText.text = test.world.stats();
     }
 }

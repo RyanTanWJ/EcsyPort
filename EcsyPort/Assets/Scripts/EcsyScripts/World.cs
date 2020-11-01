@@ -141,7 +141,7 @@ namespace EcsyPort
 
         public string stats()
         {
-            return string.Format("Stats:\n{0},\n{1}\n", entityManager.stats(), systemManager.stats());
+            return string.Format("Stats:\n{0}\n{1}\n", entityManager.stats(), systemManager.stats());
         }
     }
 }
