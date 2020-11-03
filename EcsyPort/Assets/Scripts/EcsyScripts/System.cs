@@ -20,8 +20,9 @@ namespace EcsyPort
         /// </summary>
         public SystemQueries queries;
 
+        public QueryKey queryKey;
+
         public static bool isSystem = true;
-        protected abstract bool componentCheck(Entity entity);
 
         /// <summary>
         /// This function is called for each run of world. All of the queries defined on the class are available here.

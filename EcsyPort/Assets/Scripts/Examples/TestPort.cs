@@ -6,72 +6,63 @@ namespace TestPort
 {
     public class MovementSystem : EcsyPort.System
     {
-        public MovementSystem(){
-            init();
-        }
-
-        protected override bool componentCheck(Entity entity)
+        public MovementSystem()
         {
-            return entity.hasComponent<PositionComponent>();
+            init();
         }
 
         public override void execute(float deltaTime, Entity entity)
         {
-            if (componentCheck(entity))
-            {
-                PositionComponent position = entity.getComponent<PositionComponent>();
-                position.x += deltaTime;
-            }
+            PositionComponent position = entity.getComponent<PositionComponent>();
+            position.x += deltaTime;
         }
 
         public override void init()
         {
             priority = 2;
-            // TODO: Create System Query
+            queryKey = new QueryKey();
+            queryKey.AddComponent<PositionComponent>();
         }
     }
     public class RotationSystem : EcsyPort.System
     {
-        public RotationSystem(){
-            init();
-        }
-
-        protected override bool componentCheck(Entity entity)
+        public RotationSystem()
         {
-            return entity.hasComponent<RotationComponent>();
+            init();
         }
 
         public override void execute(float deltaTime, Entity entity)
         {
-            if (componentCheck(entity))
-            {
-                RotationComponent rotation = entity.getComponent<RotationComponent>();
-                rotation.x += 10 * deltaTime;
-                rotation.y += 5 * deltaTime;
-            }
+            RotationComponent rotation = entity.getComponent<RotationComponent>();
+            rotation.x += 10 * deltaTime;
+            rotation.y += 5 * deltaTime;
         }
 
         public override void init()
         {
             priority = 1;
-            // TODO: Create System Query
+            queryKey = new QueryKey();
+            queryKey.AddComponent<RotationComponent>();
         }
     }
 
     public class CubeEntity : EcsyPort.Entity
     {
-        public CubeEntity(){
+        public CubeEntity()
+        {
             components = new Dictionary<Type, Component>();
             addComponent<PositionComponent>();
             addComponent<RotationComponent>();
         }
 
-        public PositionComponent Position{
-            get{return (PositionComponent) components[typeof(PositionComponent)];}
+        public PositionComponent Position
+        {
+            get { return (PositionComponent)components[typeof(PositionComponent)]; }
         }
 
-        public RotationComponent Rotation{
-            get{return (RotationComponent) components[typeof(RotationComponent)];}
+        public RotationComponent Rotation
+        {
+            get { return (RotationComponent)components[typeof(RotationComponent)]; }
         }
     }
 

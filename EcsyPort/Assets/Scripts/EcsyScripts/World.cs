@@ -25,6 +25,7 @@ namespace EcsyPort
             componentManager = new ComponentManager();
             entityManager = new EntityManager();
             systemManager = new SystemManager();
+            queryManager = new QueryManager();
         }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace EcsyPort
         {
             T newEnt = entityManager.requestEntity<T>();
             newEnt.name = name;
+            queryManager.onEntityAdded(newEnt);
             return newEnt;
         }
 
@@ -50,15 +52,13 @@ namespace EcsyPort
                 return;
             }
             Dictionary<Type, System> systems = systemManager.getSystems();
-            Dictionary<Type, EntityPool> entities = entityManager.getEntities();
             foreach (Type systemKey in systemManager.OrderedSystemKeys)
             {
-                foreach (Type entityKey in entities.Keys)
+                QueryKey queryKey = systems[systemKey].queryKey;
+                QueryResults query = queryManager.getQuery(queryKey);
+                foreach (Entity entity in query.added)
                 {
-                    foreach (Entity entity in entities[entityKey].getActiveEntities())
-                    {
-                        systems[systemKey].execute(deltaTime, entity);
-                    }
+                    systems[systemKey].execute(deltaTime, entity);
                 }
             }
         }
@@ -115,6 +115,11 @@ namespace EcsyPort
         /// <param name="system">Type of system to register.</param>
         public void registerSystem(System system)
         {
+            if (system.queryKey == null)
+            {
+                throw new NotImplementedException(string.Format("[{0}] queryKey not defined", system.GetType()));
+            }
+            queryManager.addQuery(system.queryKey);
             systemManager.registerSystem(system);
         }
 

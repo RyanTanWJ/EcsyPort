@@ -45,7 +45,7 @@ namespace EcsyPort
             foreach (QueryKey queryKey in queries.Keys)
             {
                 bool hasComponents = entity.hasAllComponents(queryKey.components.ToList<Type>());
-                bool noNotComponents = !entity.hasAnyComponents(queryKey.components.ToList<Type>());
+                bool noNotComponents = !entity.hasAnyComponents(queryKey.notComponents.ToList<Type>());
                 if (hasComponents && noNotComponents)
                 {
                     queries[queryKey].AddEntity(entity);

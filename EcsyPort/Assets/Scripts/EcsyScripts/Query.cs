@@ -20,6 +20,22 @@ namespace EcsyPort
             notComponents = new HashSet<Type>();
         }
 
+        public void AddComponent<C>() where C : Component{
+            components.Add(typeof(C));
+        }
+
+        public void RemoveComponent(Type systemType){
+            components.Remove(systemType);
+        }
+
+        public void AddNotComponent<C>() where C : Component{
+            notComponents.Add(typeof(C));
+        }
+
+        public void RemoveNotComponent(Type systemType){
+            notComponents.Remove(systemType);
+        }
+
         public bool HasComponent(Type componentType){
             return components.Contains(componentType);
         }
