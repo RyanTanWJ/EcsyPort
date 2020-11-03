@@ -6,6 +6,8 @@ namespace EcsyPort
 {
     public class EntityManager
     {
+        private QueryManager queryManager;
+        // private EventDispatcher eventDispatcher;
         private Dictionary<Type, EntityPool> _entities;
 
         public EntityManager()
@@ -59,10 +61,11 @@ namespace EcsyPort
         public string stats()
         {
             string entitiesStr = "";
-            foreach(var type in _entities.Keys){
+            foreach (var type in _entities.Keys)
+            {
                 entitiesStr += string.Format("{0}: {1}\n", type.ToString(), _entities[type].getActiveEntities().Count);
             }
-            
+
             return string.Format("EntityManager:\nNum Entity Types: {0}\nEntity Type Count: {1}", _entities.Count, entitiesStr);
         }
     }
