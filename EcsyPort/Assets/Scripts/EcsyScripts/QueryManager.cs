@@ -15,7 +15,8 @@ namespace EcsyPort
 
         public void addQuery(QueryKey queryKey)
         {
-            if (queryKey.components.Count()<=0){
+            if (queryKey.components.Count() <= 0)
+            {
                 return;
             }
             if (queries.ContainsKey(queryKey))
@@ -39,9 +40,25 @@ namespace EcsyPort
             return null;
         }
 
+        public void onEntityAdded(Entity entity)
+        {
+            foreach (QueryKey queryKey in queries.Keys)
+            {
+                bool hasComponents = entity.hasAllComponents(queryKey.components.ToList<Type>());
+                bool noNotComponents = !entity.hasAnyComponents(queryKey.components.ToList<Type>());
+                if (hasComponents && noNotComponents)
+                {
+                    queries[queryKey].AddEntity(entity);
+                }
+            }
+        }
+
         public void onEntityRemoved(Entity entity)
         {
-
+            foreach (QueryKey queryKey in queries.Keys)
+            {
+                queries[queryKey].RemoveEntity(entity);
+            }
         }
 
         /// <summary>
@@ -52,11 +69,26 @@ namespace EcsyPort
         public void onEntityComponentAdded(Entity entity, Component component)
         {
             // Check each indexed query to see if we need to add this entity to the list
-
-            // Add the entity only if:
-            // Component is in the query
-            // and Entity has ALL the components of the query
-            // and Entity is not already in the query
+            foreach (QueryKey queryKey in queries.Keys)
+            {
+                // Add the entity only if:
+                // Component is in the query
+                // and Entity has ALL the components of the query
+                // and Entity is not already in the query
+                bool hasComponents = entity.hasAllComponents(queryKey.components.ToList<Type>());
+                bool noNotComponents = !entity.hasAnyComponents(queryKey.components.ToList<Type>());
+                if (noNotComponents)
+                {
+                    if (hasComponents && !queries[queryKey].HasEntity(entity))
+                    {
+                        queries[queryKey].AddEntity(entity);
+                    }
+                }
+                else if (queries[queryKey].HasEntity(entity))
+                {
+                    queries[queryKey].RemoveEntity(entity);
+                }
+            }
         }
 
         /// <summary>
@@ -66,6 +98,23 @@ namespace EcsyPort
         /// <param name="component">Component to remove from the entity</param>
         public void onEntityComponentRemoved(Entity entity, Component component)
         {
+            // Check each indexed query to see if we need to add this entity to the list
+            foreach (QueryKey queryKey in queries.Keys)
+            {
+                bool hasComponents = entity.hasAllComponents(queryKey.components.ToList<Type>());
+                bool noNotComponents = !entity.hasAnyComponents(queryKey.components.ToList<Type>());
+                if (noNotComponents)
+                {
+                    if (hasComponents && !queries[queryKey].HasEntity(entity))
+                    {
+                        queries[queryKey].AddEntity(entity);
+                    }
+                }
+                else if (queries[queryKey].HasEntity(entity))
+                {
+                    queries[queryKey].RemoveEntity(entity);
+                }
+            }
         }
 
         public string stats()

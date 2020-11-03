@@ -43,11 +43,6 @@ namespace EcsyPort
             throw new NotImplementedException();
         }
 
-        public Component getComponent(Type componentType)
-        {
-            return components[componentType];
-        }
-
         /// <summary>
         /// Get a component on this entity.
         /// </summary>

@@ -8,16 +8,24 @@ namespace EcsyPort
         /// <summary>
         /// Components that should be in an entity for the entity to be added to the query
         /// </summary>
-        public List<Type> components;
+        public HashSet<Type> components;
         /// <summary>
         /// Components that should not be in an entity for the entity to be added to the query
         /// </summary>
-        public List<Type> notComponents;
+        public HashSet<Type> notComponents;
 
         public QueryKey()
         {
-            components = new List<Type>();
-            notComponents = new List<Type>();
+            components = new HashSet<Type>();
+            notComponents = new HashSet<Type>();
+        }
+
+        public bool HasComponent(Type componentType){
+            return components.Contains(componentType);
+        }
+
+        public bool HasNotComponent(Type componentType){
+            return notComponents.Contains(componentType);
         }
 
         // override object.Equals
@@ -35,17 +43,45 @@ namespace EcsyPort
                 return false;
             }
 
-            // TODO: write your implementation of Equals() here
-            throw new NotImplementedException();
-            return base.Equals(obj);
+            QueryKey qkObj = (QueryKey)obj;
+            foreach (var component in qkObj.components)
+            {
+                if (!components.Contains(component))
+                {
+                    return false;
+                }
+            }
+            foreach (var notComponent in qkObj.notComponents)
+            {
+                if (!notComponents.Contains(notComponent))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            // TODO: write your implementation of GetHashCode() here
-            throw new NotImplementedException();
-            return base.GetHashCode();
+            // TODO: verify correctness
+            int componentsHashCode = 0;
+            foreach (var component in components)
+            {
+                componentsHashCode = componentsHashCode ^ component.GetHashCode();
+
+            }
+            int notComponentsHashCode = 0;
+            foreach (var notComponent in notComponents)
+            {
+                notComponentsHashCode = notComponentsHashCode ^ notComponent.GetHashCode();
+            }
+
+            // factored sum
+            int hash = 27;
+            hash = (13 * hash) + componentsHashCode;
+            hash = (13 * hash) + notComponentsHashCode;
+            return hash;
         }
     }
 
@@ -73,6 +109,24 @@ namespace EcsyPort
             removed = new List<Entity>();
             changed = new List<Entity>();
             results = new List<Entity>();
+        }
+
+        public void AddEntity(Entity entity){
+            added.Add(entity);
+        }
+
+        public void RemoveEntity(Entity entity){
+            if (added.Remove(entity)){
+                removed.Add(entity);
+            }
+        }
+
+        public bool HasEntity(Entity entity){
+            return added.Contains(entity);
+        }
+
+        public void ClearRemovedEntities(Entity entity){
+            removed.Clear();
         }
     }
 

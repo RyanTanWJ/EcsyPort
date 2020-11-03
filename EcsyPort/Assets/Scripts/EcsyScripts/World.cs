@@ -13,6 +13,8 @@ namespace EcsyPort
         private ComponentManager componentManager;
         private EntityManager entityManager;
         private SystemManager systemManager;
+        private QueryManager queryManager;
+        // private EventDispatcher eventDispatcher;
 
         #region API Reference
         /// <summary>

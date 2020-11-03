@@ -6,8 +6,6 @@ namespace EcsyPort
 {
     public class EntityManager
     {
-        private QueryManager queryManager;
-        // private EventDispatcher eventDispatcher;
         private Dictionary<Type, EntityPool> _entities;
 
         public EntityManager()
